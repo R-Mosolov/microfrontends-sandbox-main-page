@@ -2,7 +2,6 @@ import * as React from "react";
 import {
   createBrowserRouter,
   RouterProvider,
-  Link
 } from "react-router-dom";
 
 function App() {
@@ -12,15 +11,15 @@ function App() {
       element: (
         <>
           <h1>Main Page</h1>
-          <Link to="/second-page">
+          <a href="http://localhost:3001/">
             Go to Second Page
-          </Link>
+          </a>
         </>
       ),
     },
     {
-      path: "/second-page",
-      element: <h1>Second Page</h1>,
+      path: "http://localhost:3001/",
+      element: <h1>Second Fake Page</h1>,
     },
   ]);
 
