@@ -1,21 +1,40 @@
-import React, {Suspense} from "react";
-const RemoteApp = React.lazy(() => import("app2/App"));
+import React, { Suspense } from "react";
+import { Link } from "react-router-dom";
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+
+const MicroFrontend2 = React.lazy(() => import("app2/App"));
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: (
+      <>
+        <h1>Micro-frontend 1</h1>
+        <Link to="/second-page">
+          Go to micro-frontend 2
+        </Link>
+      </>
+    ),
+  },
+  {
+    path: "/second-page",
+    element: (
+      <Suspense fallback={"loading..."}>
+        <MicroFrontend2 />
+      </Suspense>
+    ),
+  },
+]);
 
 const App = () => {
   return (
-    <div>
-      <div style={{
-        margin:"10px",
-        padding:"10px",
-        textAlign:"center",
-        backgroundColor:"greenyellow"
-      }}>
-        <h1>App1</h1>
-      </div>
-      <Suspense fallback={"loading..."}>
-        <RemoteApp/>
-      </Suspense>
-    </div>)
+    <React.StrictMode>
+      <RouterProvider router={router} />
+    </React.StrictMode>
+  );
 }
 
 
