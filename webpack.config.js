@@ -1,35 +1,42 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const {ModuleFederationPlugin} = require("webpack").container;
+const ExternalTemplateRemotesPlugin = require("external-remotes-plugin");
+const path = require("path");
 
 module.exports = {
-  mode: 'development',
-  entry: './src/index.js',
+  entry: "./src/index",
+  mode: "development",
+  devServer: {
+    static: path.join(__dirname, "dist"),
+    port: 3001,
+  },
   output: {
-    filename: 'main.js',
-    path: path.resolve(__dirname, 'dist'),
-    publicPath: '/'
+    publicPath: "auto",
   },
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.jsx?$/,
+        loader: "babel-loader",
         exclude: /node_modules/,
-        use: {
-          loader: "babel-loader"
+        options: {
+          presets: ["@babel/preset-react"],
         },
-      }
+      },
     ],
   },
-  resolve: {
-    extensions: ['.js'],
-  },
-  devServer: {
-    port: 3000
-  },
   plugins: [
-    new HtmlWebpackPlugin({
-      title: 'Main Page',
-      template: 'public/index.html',
+    new ModuleFederationPlugin({
+      name: "app1",
+      remotes: {
+        app2: "app2@[app2Url]/remoteEntry.js",
+      },
+      shared: {react: {singleton: true}, "react-dom": {singleton: true}},
     }),
-  ]
+    new ExternalTemplateRemotesPlugin(),
+    new HtmlWebpackPlugin({
+      template: "./public/index.html",
+    }),
+  ],
 };
+

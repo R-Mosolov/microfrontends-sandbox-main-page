@@ -1,33 +1,22 @@
-import * as React from "react";
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import React, {Suspense} from "react";
+const RemoteApp = React.lazy(() => import("app2/App"));
 
-function App() {
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: (
-        <>
-          <h1>Main Page</h1>
-          <a href="http://localhost:3001/">
-            Go to Second Page
-          </a>
-        </>
-      ),
-    },
-    {
-      path: "http://localhost:3001/",
-      element: <h1>Second Fake Page</h1>,
-    },
-  ]);
-
+const App = () => {
   return (
-    <div className="App">
-      <RouterProvider router={router} />
-    </div>
-  );
+    <div>
+      <div style={{
+        margin:"10px",
+        padding:"10px",
+        textAlign:"center",
+        backgroundColor:"greenyellow"
+      }}>
+        <h1>App1</h1>
+      </div>
+      <Suspense fallback={"loading..."}>
+        <RemoteApp/>
+      </Suspense>
+    </div>)
 }
+
 
 export default App;
